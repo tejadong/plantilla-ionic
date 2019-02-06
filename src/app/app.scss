@@ -1,16 +1,170 @@
 // http://ionicframework.com/docs/theming/
-
-
-// App Global Sass
+// App Shared Imports
 // --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
+
+
+
+// style for auth pages
+.auth-page {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c96e75+0,c96e75+50,c96e75+51,c96e75+100&1+0,0.83+99 */
+  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.91) 50%, rgba(255,255,255,0.91) 51%, rgba(255,255,255,0.83) 99%, rgba(255,255,255,0.83) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,0.91) 50%,rgba(255,255,255,0.91) 51%,rgba(255,255,255,0.83) 99%,rgba(255,255,255,0.83) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0.91) 50%,rgba(255,255,255,0.91) 51%,rgba(255,255,255,0.83) 99%,rgba(255,255,255,0.83) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c96e75', endColorstr='#d4c96e75',GradientType=0 ); /* IE6-9 */
+
+  &::after {
+    content: "";
+    background: url("../assets/imgs/bg2.jpg") no-repeat;
+    background-size: cover;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: 0;
+  }
+
+  .grid {
+    padding: 0;
+    .col {
+      padding: 0;
+    }
+  }
+
+  .btn-group {
+    .button-ios,
+    .button-md {
+      border-radius: 0;
+      &:first-of-type {
+        border-radius: 2px 0 0 2px;
+      }
+      &:last-of-type {
+        border-radius: 0 2px 2px 0;
+      }
+    }
+  }
+
+  .scroll-content {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    //background: rgba(50, 10, 92, .4);
+
+    .login-content {
+      width: 80%;
+
+      //.logo {
+      //  //width: 100px;
+      //  height: 80px;
+      //  margin: 20px auto 0;
+      //  border-radius: 10%;
+      //  background: url("../assets/imgs/logo.png") no-repeat;
+      //  background-size: 100%;
+      //}
+
+      .list-form {
+        padding: 0;
+        margin-bottom: 0;
+
+        ion-item {
+          background: none;
+          padding: 0;
+
+          &:first-child {
+            border-top: none;
+          }
+
+          &:after {
+            display: none;
+          }
+
+          ion-label {
+            font-size: 1em;
+            color: color($colors, primary);
+          }
+
+          input {
+            color: color($colors, primary);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+// Animate CSS
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animated.infinite {
+  animation-iteration-count: infinite;
+}
+
+.animated.hinge {
+  animation-duration: 2s;
+}
+
+.animated.flipOutX,
+.animated.flipOutY,
+.animated.bounceIn,
+.animated.bounceOut {
+  animation-duration: .75s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fadeInDown {
+  animation-name: fadeInDown;
+}
+
+.loading-wrapper {
+  width: 24vw;
+  background: none !important;
+  padding: 0 !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.alert-md .alert-checkbox-label {
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+.alert-md .alert-wrapper {
+  width: 90% !important;
+  max-width: none !important;
+}
+
+.disabled-link {
+  pointer-events:none;
+  opacity: .50;
+}
+

@@ -1,0 +1,56 @@
+<!-- -->
+<ion-content padding class="animated fadeIn login auth-page">
+  <div class="login-content">
+
+    <!-- Logo -->
+    <div padding-horizontal text-center class="animated fadeInDown">
+      <div class="logo">
+        <img margin-top src="assets/imgs/logo.png">
+      </div>
+      <h2 ion-text no-margin>
+        ion<strong>Example</strong>
+      </h2>
+    </div>
+
+    <!-- Login form -->
+    <form [formGroup]="onLoginForm" class="list-form">
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="person" item-start></ion-icon>
+          Usuario
+        </ion-label>
+        <ion-input [(ngModel)]="credencialesLogin.username" type="text" formControlName="usuario"></ion-input>
+      </ion-item>
+      <p ion-text color="text" class="text-1x has-error" *ngIf="onLoginForm.get('usuario').touched && onLoginForm.get('usuario').hasError('required')">Campo requerido</p>
+
+
+      <ion-item>
+        <ion-label floating>
+          <ion-icon name="lock" item-start></ion-icon>
+          Contraseña
+        </ion-label>
+          <ion-input [(ngModel)]="credencialesLogin.password" type="password" formControlName="password"></ion-input>
+      </ion-item>
+      <p ion-text color="text" class="text-1x has-error" *ngIf="onLoginForm.get('password').touched && onLoginForm.get('password').hasError('required')">Campo requerido</p>
+
+
+      <ion-item margin-top>
+          <ion-label>Recordar credenciales</ion-label>
+          <ion-toggle [(ngModel)]="credencialesLogin.recordar" formControlName="recordar"></ion-toggle>
+      </ion-item>
+
+    </form>
+
+    <div>
+      <!--[disabled]="!onLoginForm.valid"-->
+      <button ion-button icon-start block tappable (click)="login()" >
+        <ion-icon name="log-in"></ion-icon>
+        ACCEDER
+      </button>
+    </div>
+
+
+
+
+  </div>
+</ion-content>
