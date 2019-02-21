@@ -4,8 +4,6 @@ import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {Storage} from '@ionic/storage';
 import {GlobalVars} from "../providers/app.global-vars";
-import * as moment from 'moment';
-import 'moment/locale/es';
 
 @Component({
   templateUrl: 'app.html'
@@ -22,90 +20,56 @@ export class MyApp {
     private storage: Storage,
     public menuCtrl: MenuController,
   ) {
-
     this.initializeApp();
   }
 
   initializeApp() {
 
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
+    this.platform.ready().then(async () => {
+    	// 0 - Preconfiguración
+			this.statusBar.styleDefault();
+			this.statusBar.overlaysWebView(false);
+			// this.keyboard.disableScroll(true)
+			this.activarEventoBotonAtras();
 
-      // 1 - Cargamos los datos del usuario desde el LocalStorage
-      this.obtenerDatosUsuario();
+    	// 1 - Mostramos splash
+    	this.splashScreen.show();
 
-      //*** Control Splash Screen
-      // this.splashScreen.show();
-      // this.splashScreen.hide();
+      // 2 - Cargamos los datos del usuario desde el LocalStorage
+      await this.obtenerDatosUsuario();
 
-      //*** Control Status Bar
-      this.statusBar.styleDefault();
-      this.statusBar.overlaysWebView(false);
-
-      //*** Control Keyboard
-      // this.keyboard.disableScroll(true);
-
-      //*** Activa la gestión del evento del botón atras
-      this.activarEventoBotonAtras();
-
+      // 3 - Quitamos splash
+			this.splashScreen.hide();
     });
   }
 
+	async obtenerDatosUsuario() {
+
+  	let firstTime = await this.storage.get('first_time').catch(e => console.error(e)) || true;
+		this._globalVars.datosUsuario['first_time'] = firstTime;
+		await this.storage.set('first_time', firstTime);
+
+		let datosUsuario = await this.storage.get('usuario').catch(e => console.error(e)) || null;
+		this._globalVars.datosUsuario = datosUsuario;
+
+		if (datosUsuario !== null) {
+			this._globalVars.datosUsuario['isAuthenticated'] = true;
+			this._globalVars.datosUsuarioCargados = true;
+		}
+
+		this.rootPage = 'HomePage';
+	}
 
 
-
-  obtenerDatosUsuario() {
-    this.storage.keys().then((keys) => {
-
-      // Comprobamos si es la primera vez que se abre la app
-      if (keys.indexOf('first_time') === -1) {
-        this._globalVars.datosUsuario['first_time'] = true;
-        this.storage.set('first_time', true);
-      } else {
-        this.storage.get('first_time').then((valor) => {
-          this._globalVars.datosUsuario['first_time'] = valor;
-        });
-      }
-
-      if (keys.indexOf('usuario') > -1) {
-        this.storage.get('usuario').then((valores) => {
-
-          for (const valor in valores) {
-            // alert(valor);
-            this._globalVars.datosUsuario[valor] = valores[valor];
-          }
-
-          let ahora = moment();
-          let caduca = moment(this._globalVars.datosUsuario['expires_date'], "YYYY-MM-DD HH:mm:ss");
-
-          if (ahora.isBefore(caduca, 'second')) {
-            this._globalVars.datosUsuario['isAuthenticated'] = true;
-            this._globalVars.datosUsuarioCargados = true;
-            this.rootPage = 'HomePage';
-          } else {
-            this._globalVars.datosUsuarioCargados = false;
-            this.rootPage = 'LoginPage';
-          }
-
-        });
-      } else {
-        this._globalVars.datosUsuarioCargados = false;
-        this.rootPage = 'LoginPage';
-      }
-
-    });
-  }
-
-  public changePage(page, isRoot = false) {
-    this.menuCtrl.close();
+  public async changePage(page, isRoot = false) {
+    await this.menuCtrl.close();
     if (isRoot) {
-      this.nav.setRoot(page);
+      await this.nav.setRoot(page);
     } else {
-      this.nav.push(page);
+      await this.nav.push(page);
     }
 
   }
-
 
   logout() {
     this._globalVars.mostrarPregunta(
@@ -114,11 +78,11 @@ export class MyApp {
       'Cancelar',
       'Sí',
       () => {},
-      () => {
+			async () => {
         this._globalVars.datosUsuario = [];
-        this.storage.remove('usuario');
-        this.nav.setRoot('LoginPage');
-        this.menuCtrl.close();
+        await this.storage.remove('usuario');
+				await this.menuCtrl.close();
+        await this.nav.setRoot('LoginPage');
       });
   }
 
@@ -130,7 +94,7 @@ export class MyApp {
 
       let active: any = this.nav.getActive();
 
-      if (active.id == 'HomePage' || active.id == 'home' || active.id == 'LoginPage' || active.id == 'login') {
+      if (active.id == 'HomePage' || active.id == 'home') {
         if (new Date().getTime() - lastTimeBackPress < timePeriodToExit) {
           this.platform.exitApp();
         } else {
@@ -143,7 +107,6 @@ export class MyApp {
     });
 
   }
-
 
 }
 
